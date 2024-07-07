@@ -12,8 +12,5 @@ func threeConsecutiveOdds(arr []int) bool {
 			odds++
 		}
 	}
-	if odds == 3 {
-		return true
-	}
-	return false
+	return odds == 3
 }
