@@ -20,10 +20,8 @@ func sortedArrayToBST(nums []int) *TreeNode {
 		Val: nums[m],
 	}
 	l := sortedArrayToBST(nums[:m])
-	r := (*TreeNode)(nil)
-	if m+1 < len(nums) {
-		r = sortedArrayToBST(nums[m+1:])
-	}
+	r := sortedArrayToBST(nums[m+1:])
+
 	root.Left = l
 	root.Right = r
 	return root
