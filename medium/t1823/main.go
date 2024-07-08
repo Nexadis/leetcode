@@ -1,11 +1,7 @@
 package main
 
 func findTheWinner(n int, k int) int {
-	friends := make([]int, n)
-	for i := range friends {
-		friends[i] = i + 1
-	}
-	head := NewList(friends)
+	head := NewList(n)
 	l := n
 	for l > 1 {
 		head = fwdDel(head, k-1)
@@ -14,15 +10,15 @@ func findTheWinner(n int, k int) int {
 	return head.Val
 }
 
-func NewList(nums []int) *Node {
+func NewList(size int) *Node {
 	head := &Node{
-		Val: nums[0],
+		Val: 1,
 	}
 	tail := head
-	for i := 1; i < len(nums); i++ {
+	for i := 1; i < size; i++ {
 		n := &Node{
 			Prev: tail,
-			Val:  nums[i],
+			Val:  i + 1,
 			Next: head,
 		}
 		tail.Next = n
