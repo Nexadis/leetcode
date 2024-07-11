@@ -1,31 +1,48 @@
 package main
 
-import "strings"
-
 func reverseParentheses(s string) string {
-	sb := []byte(s)
-	for i := 0; i < len(sb); i++ {
-		r := sb[i]
-		switch r {
-		case '(':
-			reversed := reverseParentheses(string(sb[i+1:]))
-			for j := range reversed {
-				sb[i+j+1] = reversed[j]
-			}
-			i += len(reversed) + 1
-		case ')':
-			return string(reverse(sb[:i]))
+	teleports := getHoles(s)
+	i := 0
+	step := 1
+	res := make([]byte, 0, len(s))
+	for cnt := 0; cnt < len(s); cnt++ {
+		if s[i] == '(' || s[i] == ')' {
+			i = teleports[i]
+			step = -step
+		} else {
+			res = append(res, s[i])
 		}
+		i += step
 	}
-	s = string(sb)
-	s = strings.ReplaceAll(s, "(", "")
-	s = strings.ReplaceAll(s, ")", "")
-	return s
+	return string(res)
 }
 
-func reverse(sb []byte) []byte {
-	for i := 0; i < len(sb)/2; i++ {
-		sb[i], sb[len(sb)-i-1] = sb[len(sb)-i-1], sb[i]
+func getHoles(s string) map[int]int {
+	holes := make(map[int]int, len(s))
+	stack := stack{mem: make([]int, 0, len(s))}
+	for i, c := range s {
+		if c == '(' {
+			stack.push(i)
+		}
+		if c == ')' {
+			x := stack.pop()
+			holes[x] = i
+			holes[i] = x
+		}
 	}
-	return sb
+	return holes
+}
+
+type stack struct {
+	mem []int
+}
+
+func (s *stack) push(x int) {
+	s.mem = append(s.mem, x)
+}
+
+func (s *stack) pop() int {
+	x := s.mem[len(s.mem)-1]
+	s.mem = s.mem[:len(s.mem)-1]
+	return x
 }
